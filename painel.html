@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel da Cozinha - X Salgados</title>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #1e272e; color: white; padding: 20px; }
+        h1 { color: #ff6b00; text-align: center; font-size: 35px; }
+        .grid-pedidos { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
+        .pedido-card { background-color: #2f3640; border-left: 5px solid #2ecc71; padding: 20px; border-radius: 10px; width: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: piscar 1s ease-out; }
+        .pedido-header { font-size: 20px; font-weight: bold; color: #ff6b00; margin-bottom: 10px; border-bottom: 1px solid #555; padding-bottom: 10px; }
+        .pedido-cliente { font-size: 18px; margin-bottom: 10px; }
+        .pedido-itens { font-size: 16px; color: #dcdde1; line-height: 1.5; }
+        @keyframes piscar { 0% { background-color: #2ecc71; transform: scale(1.05); } 100% { background-color: #2f3640; transform: scale(1); } }
+        .vazio { text-align: center; color: #7f8fa6; font-size: 20px; width: 100%; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <h1><i class="fas fa-desktop"></i> Painel de Pedidos (Tempo Real)</h1>
+    <div class="grid-pedidos" id="telaDePedidos">
+        <div class="vazio" id="msgVazio">Aguardando novos pedidos...</div>
+    </div>
+
+    <script>
+        // Esse é o "Rádio" escutando as mensagens do celular
+        const canalDeComunicacao = new EventSource('https://ntfy.sh/xsalgados_senai_2026/sse');
+        
+        canalDeComunicacao.onmessage = function(event) {
+            const dados = JSON.parse(event.data);
+            
+            // Quando chega uma mensagem nova (pedido)
+            if(dados.event === 'message') {
+                document.getElementById('msgVazio').style.display = 'none';
+                
+                // Transforma o texto que o celular mandou em um cartão visual
+                const infoPedido = dados.message.split('|');
+                
+                const card = document.createElement('div');
+                card.className = 'pedido-card';
+                card.innerHTML = `
+                    <div class="pedido-header">${infoPedido[0]}</div>
+                    <div class="pedido-cliente">👤 ${infoPedido[1]}</div>
+                    <div class="pedido-itens">${infoPedido[2].replace(/,/g, '<br>')}</div>
+                `;
+                
+                // Adiciona o pedido novo no topo da tela
+                document.getElementById('telaDePedidos').prepend(card);
+                
+                // Toca um sonzinho de caixa registradora (opcional)
+                let beep = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
+                beep.play().catch(e => console.log("Áudio bloqueado pelo navegador"));
+            }
+        };
+    </script>
+</body>
+</html>
