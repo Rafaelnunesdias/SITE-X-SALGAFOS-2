@@ -1,89 +1,120 @@
-=<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X Salgados - Portal do Cliente</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>X-Salgados - Pedido Online</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-
     <div class="container">
-        <h2><i class="fas fa-hamburger"></i> X Salgados</h2>
-        <p class="subtitle">Faça seu pedido diretamente para a nossa fábrica.</p>
+        <header>
+            <h1><i class="fas fa-utensils"></i> X-Salgados</h1>
+            <p>O melhor salgado da região!</p>
+        </header>
 
         <form id="formPedido">
-            <div class="form-group">
-                <label for="nomeCliente"><i class="fas fa-user"></i> Seu Nome:</label>
-                <input type="text" id="nomeCliente" placeholder="Ex: Professor Rafael" required>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-utensils"></i> Monte seu Pedido:</label>
-                
-                <div class="cardapio-lista">
-                    <div class="menu-item" data-nome="Coxinhas Douradas">
-                        <div class="item-info">
-                            <span class="item-nome">Coxinhas Douradas</span>
-                        </div>
-                        <div class="item-controles">
-                            <button type="button" class="btn-qtd" onclick="mudarQtd(this, -1)">-</button>
-                            <input type="number" class="input-qtd" value="0" readonly>
-                            <button type="button" class="btn-qtd" onclick="mudarQtd(this, 1)">+</button>
-                        </div>
+            <div class="cardapio-lista">
+                <div class="menu-item" data-nome="Coxinhas Douradas">
+                    <div class="item-info"><h3>Coxinhas Douradas</h3></div>
+                    <div class="item-controles">
+                        <button type="button" class="btn-qtd" onclick="mudarQtd(this, -1)">-</button>
+                        <input type="number" class="input-qtd" value="0" readonly>
+                        <button type="button" class="btn-qtd" onclick="mudarQtd(this, 1)">+</button>
                     </div>
-
-                    <div class="menu-item" data-nome="Hambúrguer Artesanal">
-                        <div class="item-info">
-                            <span class="item-nome">Hambúrguer Artesanal</span>
-                        </div>
-                        <div class="item-controles">
-                            <button type="button" class="btn-qtd" onclick="mudarQtd(this, -1)">-</button>
-                            <input type="number" class="input-qtd" value="0" readonly>
-                            <button type="button" class="btn-qtd" onclick="mudarQtd(this, 1)">+</button>
-                        </div>
+                </div>
+                <div class="menu-item" data-nome="Hambúrguer Artesanal">
+                    <div class="item-info"><h3>Hambúrguer Artesanal</h3></div>
+                    <div class="item-controles">
+                        <button type="button" class="btn-qtd" onclick="mudarQtd(this, -1)">-</button>
+                        <input type="number" class="input-qtd" value="0" readonly>
+                        <button type="button" class="btn-qtd" onclick="mudarQtd(this, 1)">+</button>
                     </div>
-
-                    <div class="menu-item" data-nome="Empadas de Frango">
-                        <div class="item-info">
-                            <span class="item-nome">Empadas de Frango</span>
-                        </div>
-                        <div class="item-controles">
-                            <button type="button" class="btn-qtd" onclick="mudarQtd(this, -1)">-</button>
-                            <input type="number" class="input-qtd" value="0" readonly>
-                            <button type="button" class="btn-qtd" onclick="mudarQtd(this, 1)">+</button>
-                        </div>
+                </div>
+                <div class="menu-item" data-nome="Empadas de Frango">
+                    <div class="item-info"><h3>Empadas de Frango</h3></div>
+                    <div class="item-controles">
+                        <button type="button" class="btn-qtd" onclick="mudarQtd(this, -1)">-</button>
+                        <input type="number" class="input-qtd" value="0" readonly>
+                        <button type="button" class="btn-qtd" onclick="mudarQtd(this, 1)">+</button>
                     </div>
                 </div>
             </div>
 
-            <button type="submit"><i class="fas fa-paper-plane"></i> Enviar Pedido</button>
+            <div class="dados-cliente">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Seu Nome:</label>
+                    <input type="text" id="nomeCliente" placeholder="Como quer ser chamado?" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Endereço de Entrega:</label>
+                    <input type="text" id="enderecoCliente" placeholder="Rua, Número e Bairro" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-credit-card"></i> Forma de Pagamento:</label>
+                    <select id="pagamento" required onchange="mostrarInfoPagamento(this.value)">
+                        <option value="">Selecione...</option>
+                        <option value="Pix">Pix</option>
+                        <option value="Cartão (Maquininha)">Cartão (Maquininha)</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                    </select>
+                </div>
+
+                <!-- BLOCO PIX -->
+                <div id="bloco-pix" class="bloco-pagamento" style="display:none;">
+                    <div class="pix-box">
+                        <div class="pix-topo">💸 Pague via Pix</div>
+                        <p class="pix-label">Chave Pix (Celular):</p>
+                        <div class="pix-chave-container">
+                            <span id="pix-chave" class="pix-chave">11999999999</span>
+                            <button type="button" class="btn-copiar" onclick="copiarPix()">
+                                <i class="fas fa-copy"></i> Copiar
+                            </button>
+                        </div>
+                        <p class="pix-nome">Favorecido: <strong>X-Salgados SENAI</strong></p>
+                        <p class="pix-aviso">⚠️ Envie o comprovante pelo WhatsApp após pagar</p>
+                    </div>
+                </div>
+
+                <!-- BLOCO CARTÃO -->
+                <div id="bloco-cartao" class="bloco-pagamento" style="display:none;">
+                    <div class="info-box cartao-box">
+                        <i class="fas fa-credit-card"></i>
+                        <p>A maquininha será levada pelo entregador.<br><strong>Débito e Crédito aceitos!</strong></p>
+                    </div>
+                </div>
+
+                <!-- BLOCO DINHEIRO -->
+                <div id="bloco-dinheiro" class="bloco-pagamento" style="display:none;">
+                    <div class="info-box dinheiro-box">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <p>Pagamento na entrega em dinheiro.</p>
+                    </div>
+                    <div class="form-group" style="margin-top:12px;">
+                        <label>Troco para quanto? <span style="color:#999;font-weight:400">(opcional)</span></label>
+                        <input type="text" id="trocoCliente" placeholder="Ex: R$ 50,00">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-enviar">
+                <i class="fas fa-paper-plane"></i> Enviar Pedido
+            </button>
         </form>
 
-        <div id="telaSucesso">
-            <div class="success-icon"><i class="fas fa-motorcycle"></i></div>
-            <h3>Pedido a Caminho!</h3>
-            <div id="infoPedidoGerado"></div>
-            
-            <div class="tracking-container">
-                <div class="step active" id="step-1">
-                    <div class="step-icon"><i class="fas fa-file-invoice"></i></div>
-                    <div class="step-text">Pedido Recebido</div>
-                </div>
-                <div class="step" id="step-2">
-                    <div class="step-icon"><i class="fas fa-fire-burner"></i></div>
-                    <div class="step-text">Preparando (Cozinha)</div>
-                </div>
-                <div class="step" id="step-3">
-                    <div class="step-icon"><i class="fas fa-box-open"></i></div>
-                    <div class="step-text">Finalizando (Embalagem)</div>
-                </div>
-                <div class="step" id="step-4">
-                    <div class="step-icon"><i class="fas fa-helmet-safety"></i></div>
-                    <div class="step-text">Aguardando Motoboy</div>
-                </div>
+        <!-- TELA DE SUCESSO -->
+        <div id="telaSucesso" style="display: none; text-align: center;">
+            <div class="sucesso-icon">✅</div>
+            <h2>Pedido Recebido!</h2>
+            <div id="infoPedidoGerado" class="info-final"></div>
+            <div id="instrucao-pagamento" class="instrucao-pagamento"></div>
+
+            <div class="rastreio">
+                <div class="step active" id="step-1"><span>1</span> Pedido Recebido</div>
+                <div class="step" id="step-2"><span>2</span> Na Cozinha</div>
+                <div class="step" id="step-3"><span>3</span> Saiu para Entrega</div>
+                <div class="step" id="step-4"><span>4</span> Entregue!</div>
             </div>
         </div>
     </div>
